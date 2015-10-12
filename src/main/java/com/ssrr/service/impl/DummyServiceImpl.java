@@ -14,7 +14,6 @@ public class DummyServiceImpl implements DummyService {
 
 	@Override
 	public Quote requestApiRandom() {
-		// TODO Auto-generated method stub
 		Quote quote = restTemplate.getForObject(
 				"http://gturnquist-quoters.cfapps.io/api/random", Quote.class);
 
