@@ -14,9 +14,14 @@ public class StockRestController {
 	@Autowired
 	private StockService stockService;
 
-	@RequestMapping("/stocks/{ticker}")
-	public Stock requestApiRandom(@PathVariable String ticker) {
+	@RequestMapping("/ticker/{ticker}")
+	public Stock findStockByTicker(@PathVariable String ticker) {
 		return stockService.findStockByTicker(ticker);
+	}
+
+	@RequestMapping("/market/{market}/ticker/{ticker}")
+	public Stock findStockByTickerAndMarket(String market, String ticker) {
+		return stockService.findStockByTickerAndMarket(market, ticker);
 	}
 
 }

@@ -6,4 +6,6 @@ public interface StockService {
 
 	Stock findStockByTicker(String ticker);
 
+	Stock findStockByTickerAndMarket(String market, String ticker);
+
 }

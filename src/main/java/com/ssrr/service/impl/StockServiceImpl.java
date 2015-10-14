@@ -38,5 +38,28 @@ public class StockServiceImpl implements StockService {
 		return response.getBody();
 	}
 
+	@Override
+	public Stock findStockByTickerAndMarket(String market, String ticker) {
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+		// http://finance.yahoo.com/webservice/v1/symbols/ENG.MC/quote?format=json&view=detail
+		String url = "http://finance.yahoo.com/webservice/v1/symbols/{symbol}/quote";
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("format", "json");
+		builder.queryParam("view", "detail");
+		builder.buildAndExpand("ENG.MC");
+		HttpEntity<?> entity = new HttpEntity<>(headers);
+		
+		HttpEntity<Stock> response = restTemplate.exchange(builder.build().encode().toUri(), HttpMethod.GET, entity,
+				Stock.class);
+
+		HttpEntity<String> response2 = restTemplate.exchange(builder.build().encode().toUri(), HttpMethod.GET, entity,
+				String.class);
+		System.out.println(response2.getBody());
+		System.out.println(response);
+		System.out.println(response.getBody());
+		return response.getBody();
+	}
+
 
 }
