@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssrr.domain.Stock;
+import com.ssrr.domain.YahooResource;
 import com.ssrr.service.StockService;
 
 @RestController
@@ -20,7 +21,7 @@ public class StockRestController {
 	}
 
 	@RequestMapping("/market/{market}/ticker/{ticker}")
-	public Stock findStockByTickerAndMarket(String market, String ticker) {
+	public YahooResource findStockByTickerAndMarket(String market, String ticker) {
 		return stockService.findStockByTickerAndMarket(market, ticker);
 	}
 

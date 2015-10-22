@@ -7,13 +7,20 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.ssrr.domain.Stock;
+import com.ssrr.domain.YahooResource;
 import com.ssrr.service.StockService;
 
 @Service
 public class StockServiceImpl implements StockService {
+
+	private static final String NYSE = "NYSE";
+
+	private static final String URL_MARKIT_ON_DEMAND = "http://dev.markitondemand.com/Api/v2/Quote/json";
+	private static final String URL_YAHOO_WEB_SERVICE = "http://finance.yahoo.com/webservice/v1/symbols/{symbol}/quote";
 
 	private RestOperations restTemplate = new RestTemplate();
 
@@ -23,41 +30,37 @@ public class StockServiceImpl implements StockService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
-		String url = "http://dev.markitondemand.com/Api/v2/Quote/json";
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("symbol", ticker);
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL_MARKIT_ON_DEMAND).queryParam("symbol",
+				ticker);
 
 		HttpEntity<?> entity = new HttpEntity<>(headers);
 
 		HttpEntity<Stock> response = restTemplate.exchange(builder.build().encode().toUri(), HttpMethod.GET, entity,
 				Stock.class);
 
-//		http://dev.markitondemand.com/Api/v2/Quote/json?symbol=AAPL
-		System.out.println(response);
-		System.out.println(response.getBody());
-		// return response.getBody();
 		return response.getBody();
 	}
 
 	@Override
-	public Stock findStockByTickerAndMarket(String market, String ticker) {
+	public YahooResource findStockByTickerAndMarket(String market, String ticker) {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
-		// http://finance.yahoo.com/webservice/v1/symbols/ENG.MC/quote?format=json&view=detail
-		String url = "http://finance.yahoo.com/webservice/v1/symbols/{symbol}/quote";
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("format", "json");
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL_YAHOO_WEB_SERVICE).queryParam("format",
+				"json");
 		builder.queryParam("view", "detail");
-		builder.buildAndExpand("ENG.MC");
+		UriComponents uriComponents = null;
+		if (market.equals(NYSE)) {
+			uriComponents = builder.buildAndExpand(ticker);
+		} else {
+			uriComponents = builder.buildAndExpand(ticker + "." + market);
+		}
+
 		HttpEntity<?> entity = new HttpEntity<>(headers);
 		
-		HttpEntity<Stock> response = restTemplate.exchange(builder.build().encode().toUri(), HttpMethod.GET, entity,
-				Stock.class);
+		HttpEntity<YahooResource> response = restTemplate.exchange(uriComponents.toUri(), HttpMethod.GET, entity,
+				YahooResource.class);
 
-		HttpEntity<String> response2 = restTemplate.exchange(builder.build().encode().toUri(), HttpMethod.GET, entity,
-				String.class);
-		System.out.println(response2.getBody());
-		System.out.println(response);
-		System.out.println(response.getBody());
 		return response.getBody();
 	}
 
