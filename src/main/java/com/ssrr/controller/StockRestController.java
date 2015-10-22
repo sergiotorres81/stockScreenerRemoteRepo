@@ -21,7 +21,7 @@ public class StockRestController {
 	}
 
 	@RequestMapping("/market/{market}/ticker/{ticker}")
-	public YahooResource findStockByTickerAndMarket(String market, String ticker) {
+	public YahooResource findStockByTickerAndMarket(@PathVariable String market, @PathVariable String ticker) {
 		return stockService.findStockByTickerAndMarket(market, ticker);
 	}
 
