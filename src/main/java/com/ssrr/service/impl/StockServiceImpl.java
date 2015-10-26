@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.ssrr.domain.internal.ScreenerRemoteResource;
+import com.ssrr.domain.internal.ResourceDto;
 import com.ssrr.domain.yahoo.ResourceElement;
 import com.ssrr.domain.yahoo.Stock;
 import com.ssrr.domain.yahoo.YahooResource;
@@ -52,8 +52,8 @@ public class StockServiceImpl implements StockService {
 	}
 
 	@Override
-	public ScreenerRemoteResource findStockByTickerAndMarket(String market, String ticker) {
-		ScreenerRemoteResource resource = new ScreenerRemoteResource();
+	public ResourceDto findStockByTickerAndMarket(String market, String ticker) {
+		ResourceDto resource = new ResourceDto();
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL_YAHOO_WEB_SERVICE).queryParam("format",

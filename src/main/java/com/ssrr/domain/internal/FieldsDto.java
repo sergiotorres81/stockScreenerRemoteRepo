@@ -1,6 +1,6 @@
 package com.ssrr.domain.internal;
 
-public class ScreenerRemoteFields {
+public class FieldsDto {
 
 	private String day_low;
 

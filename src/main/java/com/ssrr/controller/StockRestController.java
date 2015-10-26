@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssrr.domain.internal.ScreenerRemoteResource;
+import com.ssrr.domain.internal.ResourceDto;
 import com.ssrr.domain.yahoo.Stock;
 import com.ssrr.service.StockService;
 
@@ -21,7 +21,7 @@ public class StockRestController {
 	}
 
 	@RequestMapping("/market/{market}/ticker/{ticker}")
-	public ScreenerRemoteResource findStockByTickerAndMarket(@PathVariable String market, @PathVariable String ticker) {
+	public ResourceDto findStockByTickerAndMarket(@PathVariable String market, @PathVariable String ticker) {
 		return stockService.findStockByTickerAndMarket(market, ticker);
 	}
 

@@ -1,6 +1,6 @@
 package com.ssrr.service;
 
-import com.ssrr.domain.internal.ScreenerRemoteResource;
+import com.ssrr.domain.internal.ResourceDto;
 import com.ssrr.domain.yahoo.Stock;
 
 public interface StockService {
@@ -30,6 +30,6 @@ public interface StockService {
 	 * @param ticker
 	 * @return
 	 */
-	ScreenerRemoteResource findStockByTickerAndMarket(String market, String ticker);
+	ResourceDto findStockByTickerAndMarket(String market, String ticker);
 
 }

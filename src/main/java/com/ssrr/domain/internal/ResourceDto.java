@@ -1,15 +1,15 @@
 package com.ssrr.domain.internal;
 
-public class ScreenerRemoteResource {
+public class ResourceDto {
 
-	private ScreenerRemoteFields fields;
+	private FieldsDto fields;
 
 	private String type;
 
 	/**
 	 * @return the fields
 	 */
-	public ScreenerRemoteFields getFields() {
+	public FieldsDto getFields() {
 		return fields;
 	}
 
@@ -17,7 +17,7 @@ public class ScreenerRemoteResource {
 	 * @param fields
 	 *            the fields to set
 	 */
-	public void setFields(ScreenerRemoteFields fields) {
+	public void setFields(FieldsDto fields) {
 		this.fields = fields;
 	}
 
