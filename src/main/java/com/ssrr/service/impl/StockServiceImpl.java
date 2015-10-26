@@ -1,5 +1,10 @@
 package com.ssrr.service.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -10,12 +15,17 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.ssrr.domain.Stock;
-import com.ssrr.domain.YahooResource;
+import com.ssrr.domain.internal.ScreenerRemoteResource;
+import com.ssrr.domain.yahoo.ResourceElement;
+import com.ssrr.domain.yahoo.Stock;
+import com.ssrr.domain.yahoo.YahooResource;
 import com.ssrr.service.StockService;
 
 @Service
 public class StockServiceImpl implements StockService {
+
+	@Autowired
+	private ResourceMapper mapper;
 
 	private static final String NYSE = "NYSE";
 
@@ -42,8 +52,8 @@ public class StockServiceImpl implements StockService {
 	}
 
 	@Override
-	public YahooResource findStockByTickerAndMarket(String market, String ticker) {
-
+	public ScreenerRemoteResource findStockByTickerAndMarket(String market, String ticker) {
+		ScreenerRemoteResource resource = new ScreenerRemoteResource();
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL_YAHOO_WEB_SERVICE).queryParam("format",
@@ -60,8 +70,12 @@ public class StockServiceImpl implements StockService {
 		
 		HttpEntity<YahooResource> response = restTemplate.exchange(uriComponents.toUri(), HttpMethod.GET, entity,
 				YahooResource.class);
-
-		return response.getBody();
+		YahooResource yahooResource = response.getBody();
+		if (!CollectionUtils.sizeIsEmpty(yahooResource.getList().getResources())) {
+			List<ResourceElement> resourceList = Arrays.asList(yahooResource.getList().getResources());
+			mapper.map(resourceList.get(0).getResource(), resource);
+		}
+		return resource;
 	}
 
 
